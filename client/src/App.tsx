@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <h1>Booking App</h1>
-      <ReservationForm></ReservationForm>
+      <ReservationForm onAdd={() => {}}></ReservationForm>
     </>
   );
 }
