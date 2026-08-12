@@ -32,10 +32,8 @@ function App() {
     load();
   }, []);
 
-  const handleAdd = async (newReservation: Reservation) => {
+  const handleAdd = async (payload: Omit<Reservation, "id">) => {
     try {
-      // Omit local id – backend creates _id
-      const { id: _id, ...payload } = newReservation;
       const created = await createReservation(payload);
       setReservations((prev) => [created, ...prev]);
     } catch {

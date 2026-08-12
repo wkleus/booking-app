@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import type { Reservation, Occasion } from "../types/reservation";
 
 interface ReservationFormProps {
-  onAdd: (reservation: Reservation) => void;
+  onAdd: (reservation: Omit<Reservation, "id">) => void;
 }
 
 interface FormState {
@@ -46,10 +46,13 @@ function ReservationForm({ onAdd }: ReservationFormProps) {
       return;
     }
 
-    // NOTE: for now: lift data up to parent (local state) -> Later: call backend API instead
     onAdd({
-      ...formData,
-      id: crypto.randomUUID(), // temporary local id
+      name: formData.name,
+      email: formData.email,
+      date: formData.date,
+      time: formData.time,
+      guests: formData.guests,
+      occasion: formData.occasion,
     });
 
     setFormData(initialFormState);
