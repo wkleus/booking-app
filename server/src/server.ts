@@ -15,3 +15,16 @@ async function start(): Promise<void> {
 }
 
 start();
+
+/* LOCAL TESTS - in VSC Terminal */
+//
+// $ curl http://localhost:3000/api/health
+// {"status":"ok"}
+
+// $ curl -X POST http://localhost:3000/api/reservations \
+//   -H "Content-Type: application/json" \
+//   -d '{"name":"Test","email":"test@example.com","date":"2026-08-20","time":"19:00","guests":2,"occasion":"Other"}'
+// {"name":"Test","email":"test@example.com","date":"2026-08-20","time":"19:00","guests":2,"occasion":"Other","_id":"6a7c730fecd7aa1d35cfcaf8","createdAt":"2026-08-12T13:20:15.617Z","updatedAt":"2026-08-12T13:20:15.617Z","__v":0}
+
+// $ curl http://localhost:3000/api/reservations
+// [{"_id":"6a7c730fecd7aa1d35cfcaf8","name":"Test","email":"test@example.com","date":"2026-08-20","time":"19:00","guests":2,"occasion":"Other","createdAt":"2026-08-12T13:20:15.617Z","updatedAt":"2026-08-12T13:20:15.617Z","__v":0},{"_id":"6a7c6fc749e3c76c5dfcb1fa","name":"Test","email":"test@example.com","date":"2026-08-20","time":"19:00","guests":2,"occasion":"Other","createdAt":"2026-08-12T13:06:15.517Z","updatedAt":"2026-08-12T13:06:15.517Z","__v":0}]
