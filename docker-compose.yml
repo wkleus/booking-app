@@ -1,0 +1,46 @@
+# Orchestrate API + MongoDB with: docker compose up --build
+# Frontend stays local for now: cd client && npm run dev
+
+services:
+  # MongoDB
+  mongo:
+    image: mongo:7
+    container_name: booking-mongo
+    restart: unless-stopped
+    ports:
+      # Host:Container – access Mongo from machine if needed (Compass)
+      - "27017:27017"
+    volumes:
+      # Persist data even if container is removed
+      - mongo_data:/data/db
+    # Healthcheck so API can wait until Mongo is ready
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Express API
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: booking-api
+    restart: unless-stopped
+    ports:
+      # Host port 3000 → container port 3000
+      - "3000:3000"
+    environment:
+      # Inside Docker the hostname "mongo" resolves to mongo service
+      PORT: 3000
+      MONGODB_URI: mongodb://mongo:27017/bookingdb
+    depends_on:
+      mongo:
+        condition: service_healthy
+    # Load extra env from file if adding secrets later
+    # env_file:
+    #   - ./server/.env
+
+# Named volume for MongoDB data
+volumes:
+  mongo_data:
