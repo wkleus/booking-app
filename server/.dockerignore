@@ -1,0 +1,14 @@
+# Dependencies are installed inside the image – don't copy host node_modules
+node_modules
+dist
+
+# Local env files must not end up in the image
+.env
+.env.*
+
+# Git and editor noise
+.git
+.gitignore
+*.md
+.vscode
+.idea
