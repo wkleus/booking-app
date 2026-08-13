@@ -1,8 +1,24 @@
 # Booking App
 
-A lightweight full‑stack reservation demo built to demonstrate **MongoDB** integration, **Docker** containerization, and a clean **Express + React (TypeScript)** setup.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)
+![Mongoose](https://img.shields.io/badge/Mongoose-9-880000?logo=mongoose&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
+A lightweight full‑stack reservation demo built to demonstrate **MongoDB** integration, **Docker** containerization, and a clean **Express + React (TypeScript)** setup.
 Users can create, list, and delete table reservations. The API persists data in MongoDB; the frontend is a simple React app. API and database run together via Docker Compose.
+
+---
+
+## Screenshots
+
+### Booking App Form
+
+<img src="docs/screenshots/booking-form.png" alt="Booking Form" width="800" height="400">
 
 ---
 
