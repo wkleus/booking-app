@@ -16,9 +16,13 @@ Users can create, list, and delete table reservations. The API persists data in 
 
 ## Screenshots
 
-### Booking App Form
+### Booking Form
 
 <img src="docs/screenshots/booking-form.png" alt="Booking Form" width="800" height="400">
+
+### Reservation added
+
+<img src="docs/screenshots/added-reservation.png" alt="Reservation added" width="800" height="400">
 
 ---
 
