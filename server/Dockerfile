@@ -1,21 +1,38 @@
-#  Base image: lightweight Node.js on Alpine Linux 
-FROM node:20-alpine
+# --- Stage 1: build ---
 
-# Working directory inside container
+# Install ALL deps (incl. devDependencies) and compile TypeScript -> dist/
+FROM node:20-alpine AS build
+
 WORKDIR /app
 
-# Copy dependency manifests first (better Docker layer caching)
+# Copy manifests first for better layer caching (only reinstall if these change)
 COPY package*.json ./
+RUN npm ci
 
-# Install ALL dependencies 
-# For pure production image using --omit=dev after build step
-RUN npm install
+# Copy source and compile
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
 
-# Copy rest of server source code
-COPY . .
+# --- Stage 2: production runtime ---
 
-# API listens on port 3000 inside container
+# Small, dependency-light image: only prod deps + compiled JS, no TS/tsx toolchain
+FROM node:20-alpine AS production
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Only production dependencies -> smaller image, smaller attack surface
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Bring in only compiled output from build stage
+COPY --from=build /app/dist ./dist
+
+# Run as non-root user
+# node:alpine images already ship a "node" user/group (uid/gid 1000)
+USER node
+
 EXPOSE 3000
 
-# Start TypeScript server with tsx 
-CMD ["npx", "tsx", "src/server.ts"]
+CMD ["node", "dist/server.js"]
