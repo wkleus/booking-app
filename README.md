@@ -272,6 +272,8 @@ npm run preview  # preview production build
 - TypeScript on client and server for safer refactors and clearer contracts
 - Mongoose for schema validation and a simple model layer
 - Docker Compose so MongoDB + API start with one command (portfolio-friendly DevOps signal)
+- Multi-stage Dockerfile for the API: a build stage compiles TypeScript to `dist/`, then a clean production stage installs only prod dependencies (`npm ci --omit=dev`) and copies in the compiled output — no TypeScript/tsx toolchain or source files in the final image
+- API container runs as the non-root `node` user (least-privilege principle)
 - Frontend kept outside Docker during development for fast HMR with Vite
 - Small, focused feature set – clear demo of CRUD + persistence + containers
 
