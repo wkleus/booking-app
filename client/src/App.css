@@ -1,8 +1,9 @@
 .app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1.5rem;
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem 7rem;
   font-family: system-ui, sans-serif;
+  background-color: rgb(200, 227, 236);
 }
 
 .app-header {
@@ -12,6 +13,12 @@
 
 .app-header h1 {
   margin-bottom: 0.25rem;
+  letter-spacing: 0.05rem;
+}
+
+.app-header p {
+  letter-spacing: 0.03rem;
+  font-size: 1.1rem;
 }
 
 .app-main {
@@ -48,8 +55,10 @@
 }
 
 .reservation-form button {
-  background: #0f172a;
+  background: #2f172d;
   color: white;
+  letter-spacing: 0.05rem;
+  font-weight: bold;
   border: none;
   cursor: pointer;
 }
