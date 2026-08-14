@@ -10,7 +10,7 @@
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
 A lightweight full‑stack reservation demo built to demonstrate **MongoDB** integration, **Docker** containerization, and a clean **Express + React (TypeScript)** setup.
-Users can create, list, and delete table reservations. The API persists data in MongoDB; the frontend is a simple React app. API and database run together via Docker Compose.
+Users can create, list, and delete table reservations. The API persists data in MongoDB; the frontend is a simple React app. The whole stack runs together via Docker Compose.
 
 ---
 
@@ -59,7 +59,7 @@ Users can create, list, and delete table reservations. The API persists data in 
 | Frontend | React 19, TypeScript, Vite        |
 | Backend  | Node.js, Express, TypeScript, tsx |
 | Database | MongoDB 7 + Mongoose              |
-| DevOps   | Docker, Docker Compose            |
+| DevOps   | Docker, Docker Compose, nginx     |
 | Tooling  | ES modules, dotenv, cors          |
 
 ---
@@ -93,7 +93,7 @@ booking-app/
 │   ├── .dockerignore
 │   └── package.json
 │
-├── docker-compose.yml      # API + MongoDB
+├── docker-compose.yml      # Frontend + API + MongoDB
 └── README.md
 ```
 
@@ -270,7 +270,7 @@ npm run preview  # preview production build
 
 - TypeScript on client and server for safer refactors and clearer contracts
 - Mongoose for schema validation and a simple model layer
-- Docker Compose so MongoDB + API start with one command
+- Docker Compose so the whole stack (frontend + API + MongoDB) starts with one command
 - Multi-stage Dockerfile for the API: a build stage compiles TypeScript to `dist/`, then a clean production stage installs only prod dependencies (`npm ci --omit=dev`) and copies in the compiled output — no TypeScript/tsx toolchain or source files in the final image
 - API container runs as the non-root `node` user (least-privilege principle)
 - Multi-stage Dockerfile for the frontend too: a Node build stage runs `vite build`, then a lightweight `nginx:alpine` stage serves only the compiled static files and reverse-proxies `/api/*` to the API container — no Node runtime in the final frontend image
