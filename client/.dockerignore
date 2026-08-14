@@ -1,0 +1,13 @@
+# Dependencies are installed inside image 
+node_modules
+dist
+
+# Local env files must not end up in image
+.env
+.env.*
+
+.git
+.gitignore
+*.md
+.vscode
+.idea
