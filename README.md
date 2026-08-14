@@ -36,6 +36,7 @@ Users can create, list, and delete table reservations. The API persists data in 
 | MongoDB  | `localhost:27017` (database: `bookingdb`) |
 
 > There is no public production deployment for this demo. Run everything locally.
+> The whole stack (frontend + API + MongoDB) starts with a single `docker compose up --build`.
 
 ---
 
@@ -45,7 +46,7 @@ Users can create, list, and delete table reservations. The API persists data in 
 - List all reservations
 - Delete a reservation
 - Data stored in **MongoDB**
-- **Docker Compose** setup for API + MongoDB
+- **Docker Compose** setup for frontend + API + MongoDB (full stack, one command)
 - TypeScript on both client and server
 - Simple, responsive UI
 
@@ -75,6 +76,9 @@ booking-app/
 │   │   ├── types/           # Shared TS types
 │   │   ├── App.tsx
 │   │   └── main.tsx
+│   ├── Dockerfile          # Multi-stage: Vite build -> served by nginx
+│   ├── nginx.conf          # SPA fallback + reverse proxy to the API
+│   ├── .dockerignore
 │   └── package.json
 │
 ├── server/                 # Express API
@@ -141,7 +145,7 @@ curl -X POST http://localhost:3000/api/reservations \
 - Docker Desktop (or Docker Engine + Compose plugin)
 - Optional: local MongoDB, if you run the API without Docker
 
-### Option A – Docker (recommended for API + DB)
+### Option A – Docker (recommended, full stack)
 
 From the repository root:
 
@@ -153,16 +157,11 @@ This starts:
 
 - MongoDB on port `27017`
 - API on port `3000`
+- Frontend (built with Vite, served by nginx) on port `5173`
 
-In a second terminal, start the frontend:
-
-```bash
-cd client
-npm install
-npm run dev
-```
-
-Open http://localhost:5173
+Open http://localhost:5173 — no separate `npm install`/`npm run dev` step needed;
+nginx serves the production build and proxies `/api/*` requests to the API
+container over the internal Docker network.
 
 Stop the stack:
 
@@ -176,7 +175,7 @@ Remove containers and the MongoDB volume (deletes stored data):
 docker compose down -v
 ```
 
-### Option B – Local API (without Docker)
+### Option B – Local dev (without Docker, best for fast HMR)
 
 1. Start MongoDB locally (or use a MongoDB Atlas URI).
 2. Configure the server env:
@@ -271,10 +270,11 @@ npm run preview  # preview production build
 
 - TypeScript on client and server for safer refactors and clearer contracts
 - Mongoose for schema validation and a simple model layer
-- Docker Compose so MongoDB + API start with one command (portfolio-friendly DevOps signal)
+- Docker Compose so MongoDB + API start with one command
 - Multi-stage Dockerfile for the API: a build stage compiles TypeScript to `dist/`, then a clean production stage installs only prod dependencies (`npm ci --omit=dev`) and copies in the compiled output — no TypeScript/tsx toolchain or source files in the final image
 - API container runs as the non-root `node` user (least-privilege principle)
-- Frontend kept outside Docker during development for fast HMR with Vite
+- Multi-stage Dockerfile for the frontend too: a Node build stage runs `vite build`, then a lightweight `nginx:alpine` stage serves only the compiled static files and reverse-proxies `/api/*` to the API container — no Node runtime in the final frontend image
+- Frontend still runs outside Docker during active development (`npm run dev`) for fast HMR with Vite; the containerized build is for the "run the whole stack"
 - Small, focused feature set – clear demo of CRUD + persistence + containers
 
 ---
@@ -284,5 +284,4 @@ npm run preview  # preview production build
 - [ ] Add update (PUT/PATCH) for reservations
 - [ ] Input validation middleware (e.g. Zod)
 - [ ] Simple auth or rate limiting
-- [ ] Containerize the frontend (nginx or Node) in Compose
 - [ ] Basic tests (Supertest + Vitest/Jest)
